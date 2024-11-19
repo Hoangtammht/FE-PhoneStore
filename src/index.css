@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+:where(.css-dev-only-do-not-override-yx9ui5).ant-btn.ant-btn-icon-only {
+  width: 32px;
+  padding-inline: 0;
+  display: none;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -1,0 +1,26 @@
+.table-row-white {
+    background-color: #ffffff;
+}
+
+.table-row-gray {
+    background-color: #f7f7f7;
+}
+
+.ant-btn:focus, .ant-btn:active {
+    border-color: transparent !important; 
+    box-shadow: none !important;
+    background-color: #ff7f32 !important; 
+    color: white !important; 
+  }
+  
+  .ant-btn:hover {
+    border-color: #ff7f32 !important; 
+    color: black !important; 
+  }
+  
+  .ant-btn-primary {
+    background-color: #ff7f32 !important; 
+    border-color: #ff7f32 !important;
+    color: white !important; 
+  }
+  
