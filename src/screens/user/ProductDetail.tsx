@@ -375,7 +375,6 @@ const ProductDetail = () => {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-4 mt-8">
-
                     <p className="text-lg">
                         {product?.description}
                     </p>
@@ -383,7 +382,7 @@ const ProductDetail = () => {
                     <img
                         src={product?.image}
                         alt={product?.productName}
-                        className="w-full h-full object-contain"
+                        className="w-full h-[200px] object-contain rounded-md"
                     />
                 </div>
 

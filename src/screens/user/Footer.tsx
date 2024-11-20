@@ -38,39 +38,62 @@ function FooterPage() {
           </h2>
         </div>
 
-        <Button
-          className="absolute left-0 top-1/2 z-10 -translate-y-1/2"
-          icon={<LeftOutlined />}
-          onClick={() => carouselRef.current?.prev()}
-        />
-
-        <Button
-          className="absolute right-0 top-1/2 z-10 -translate-y-1/2"
-          icon={<RightOutlined />}
-          onClick={() => carouselRef.current?.next()}
-        />
-
-        <Carousel ref={carouselRef} autoplay className="mx-12">
-          {customerImages.map((image) => (
-            <div key={image.customerImageID} className="px-2">
-              <div className="aspect-w-16 h-[500px]">
+        <div className="relative mx-auto border-2 border-orange-500 rounded-lg p-4 max-w-[1000px] h-[270px]">
+          <Carousel
+            ref={carouselRef}
+            autoplay
+            dots={false}
+            slidesToShow={5}
+            slidesToScroll={1}
+            infinite
+            centerMode
+            centerPadding="0"
+            responsive={[
+              {
+                breakpoint: 1024, // Web
+                settings: {
+                  slidesToShow: 5,
+                },
+              },
+              {
+                breakpoint: 768,
+                settings: {
+                  slidesToShow: 2,
+                },
+              },
+              {
+                breakpoint: 480,
+                settings: {
+                  slidesToShow: 2,
+                },
+              },
+            ]}
+          >
+            {customerImages.map((image) => (
+              <div
+                key={image.customerImageID}
+                className="flex justify-center items-center pr-4"
+              >
                 <img
                   src={image.imageURL}
                   alt={`Customer ${image.customerImageID}`}
-                  className="w-full h-full object-contain rounded-lg"
+                  className="w-[200px] h-[250px] sm:w-[180px] sm:h-[200px] object-cover rounded-md shadow-md"
                 />
               </div>
-            </div>
-          ))}
-        </Carousel>
-
+            ))}
+          </Carousel>
+        </div>
       </div>
+
+
+
+
 
       <div className="mb-12 rounded-lg overflow-hidden shadow-lg">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1959.6111722078827!2d106.68!3d10.76!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQ1JzM2LjAiTiAxMDbCsDQwJzQ4LjAiRQ!5e0!3m2!1sen!2s!4v1599999999999!5m2!1sen!2s"
           width="100%"
-          height="450"
+          height="300"
           style={{ border: 0 }}
           allowFullScreen
           loading="lazy"
@@ -81,10 +104,10 @@ function FooterPage() {
         <div className="container mx-auto px-4">
           <Row gutter={[32, 32]}>
             <Col xs={24} sm={12} md={8}>
-              <Title level={4} className="text-yellow-500 mb-6">
+              <Title level={4} className="text-yellow-500 mb-6 text-left">
                 THÔNG TIN CỬA HÀNG
               </Title>
-              <ul className="space-y-3">
+              <ul className="space-y-3 text-left">
                 <li>
                   <Link href="#" className="text-gray-300 hover:text-white">
                     Hướng dẫn mua hàng trả góp
@@ -119,10 +142,10 @@ function FooterPage() {
             </Col>
 
             <Col xs={24} sm={12} md={8}>
-              <Title level={4} className="text-yellow-500 mb-6">
+              <Title level={4} className="text-yellow-500 mb-6 text-left">
                 TỔNG ĐÀI CHĂM SÓC KHÁCH HÀNG
               </Title>
-              <div className="space-y-4">
+              <div className="space-y-4 text-left">
                 <div className="flex items-center gap-2">
                   <PhoneOutlined className="text-green-500" />
                   <Text className="text-white">0931.692.639 - 0932.726.593</Text>
@@ -142,10 +165,10 @@ function FooterPage() {
             </Col>
 
             <Col xs={24} md={8}>
-              <Title level={4} className="text-yellow-500 mb-6">
+              <Title level={4} className="text-yellow-500 mb-6 text-left">
                 ĐỊA CHỈ CỬA HÀNG
               </Title>
-              <div className="space-y-4">
+              <div className="space-y-4 text-left">
                 <div className="flex items-start gap-2">
                   <EnvironmentOutlined className="text-red-500 mt-1" />
                   <Text className="text-white">
@@ -159,7 +182,7 @@ function FooterPage() {
             </Col>
           </Row>
 
-          <div className="mt-12 pt-6 border-t border-gray-800 text-center">
+          <div className="mt-12 pt-6 border-t border-gray-800 text-left">
             <Text className="text-gray-400">
               © 2024 camphone Store. All rights reserved.
             </Text>
@@ -167,6 +190,7 @@ function FooterPage() {
         </div>
       </Footer>
     </>
+
   );
 }
 

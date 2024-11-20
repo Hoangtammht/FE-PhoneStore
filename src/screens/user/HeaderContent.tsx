@@ -1,18 +1,26 @@
 interface HeaderContentProps {
     models: { name: string; image: string }[];
-    onModelSelect: (model: string) => void;  // Thêm prop mới
+    onModelSelect: (model: string) => void;
 }
 
 function HeaderContent({ models, onModelSelect }: HeaderContentProps) {
     return (
         <>
-            <div className="relative h-32 bg-yellow-400 rounded-lg overflow-hidden">
+            <div className="flex bg-yellow-400 overflow-hidden">
                 <img
-                    src="https://media.vneconomy.vn/w800/images/upload/2024/09/10/apple-iphone-16-pro-series.jpg"
+                    src="https://hoangphucstore.com/assets/uploads/images/N93mG08l74r3_temp-002.jpg"
                     alt="Trade-in Promotion"
-                    className="object-cover w-full h-full"
+                    className="w-1/2 h-auto object-contain"
+                />
+                <img
+                    src="https://hoangphucstore.com/assets/uploads/images/Xs7wGcaHdBm1_trangsp.jpg"
+                    alt="Trade-in Promotion"
+                    className="w-1/2 h-auto object-contain"
                 />
             </div>
+
+
+
 
             <div className="w-full flex justify-center overflow-x-auto rounded-lg border mt-4 mb-4">
                 <div className="flex w-max space-x-4 p-4">
@@ -26,7 +34,7 @@ function HeaderContent({ models, onModelSelect }: HeaderContentProps) {
                                 <img
                                     src={model.image || 'https://media.vneconomy.vn/w800/images/upload/2024/09/10/apple-iphone-16-pro-series.jpg'}
                                     alt={model.name}
-                                    className="object-cover w-full h-full"
+                                    className="object-contain w-full h-full"
                                 />
                             </div>
                             <span className="text-sm text-center font-medium group-hover:text-primary">{model.name}</span>
@@ -34,6 +42,8 @@ function HeaderContent({ models, onModelSelect }: HeaderContentProps) {
                     ))}
                 </div>
             </div>
+
+
         </>
     );
 }

@@ -170,7 +170,7 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
                     size="large"
                     disabled={isLoading}
                 >
-                    {isLoading ? <Spin indicator={loadingIcon} /> : "Hoàn thành đặt hàng"}
+                    {isLoading ? <Spin indicator={loadingIcon} /> : "Đặt hàng"}
                 </Button>,
             ]}
             centered
