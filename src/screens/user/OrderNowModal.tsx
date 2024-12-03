@@ -120,6 +120,7 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
             customerID: customerID,
             orderID: orderID, 
             orderDetailID: orderDetailID,
+            content: formData.message
         };
 
         try {

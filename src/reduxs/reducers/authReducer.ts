@@ -3,7 +3,6 @@ import { localDataNames } from "../../constants/appInfos";
 
 export interface AuthState {
     access_token: string,
-    refresh_token: string;
     userID: number,
     userName: string,
     role: number
@@ -11,7 +10,6 @@ export interface AuthState {
 
 const initialState = {
     access_token: '',
-    refresh_token: '',
     userID: 0,
     userName: '',
     role: 0

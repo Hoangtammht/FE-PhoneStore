@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { Card, Button, Badge, Table } from 'antd';
 import { useEffect, useState } from 'react'
 import { Star, Package, Clock, Shield, Truck } from 'lucide-react'
@@ -6,6 +5,8 @@ import Slider from './Slider';
 import './ProductDetail.css'
 import ProductHandleApi from '../../apis/ProductHandleApi';
 import OrderNowModal from './OrderNowModal';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useProduct } from './ProductContext';
 
 interface IProduct {
     productID: number;
@@ -55,6 +56,15 @@ interface ProductVariant {
     stock: number;
 }
 
+interface ProductContent {
+    contentID: number;
+    productID: number;
+    title: string | null;
+    contentText: string | null;
+    contentImage: string | null;
+    displayOrder: number;
+}
+
 const formatPrice = (price: number) => {
     if (price === undefined || isNaN(price)) {
         return '0';
@@ -94,6 +104,11 @@ const ProductDetail = () => {
     const [specifications, setSpecifications] = useState<Specification[]>([]);
     const [productVariant, setProductVariant] = useState<ProductVariant | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [productContents, setProductContents] = useState<ProductContent[]>([]);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const { setProductInstall } = useProduct();
+    const navigate = useNavigate();
+
 
     const fetchProducts = async () => {
         try {
@@ -164,6 +179,18 @@ const ProductDetail = () => {
         }
     };
 
+    const fetchProductContents = async () => {
+        try {
+            const response = await ProductHandleApi(`/api/product/getProductContent?productID=${productId}`);
+            const sortedContents = response.data.sort(
+                (a: ProductContent, b: ProductContent) => a.displayOrder - b.displayOrder
+            );
+            setProductContents(sortedContents);
+        } catch (error) {
+            console.error('Failed to fetch product contents:', error);
+        }
+    };
+
     useEffect(() => {
         if (productId) {
             fetchProducts();
@@ -171,6 +198,7 @@ const ProductDetail = () => {
             fetchPromotions();
             fetchSpecifications();
             fetchStorages();
+            fetchProductContents();
         }
     }, [productId]);
 
@@ -209,15 +237,27 @@ const ProductDetail = () => {
         handleModalClose();
     };
 
+    const productInstall = {
+        productName: product?.productName || "",
+        image: product?.image || "",
+        price: productVariant?.price || 0,
+    };
+
+    const handleInstallClick = () => {
+        setProductInstall(productInstall);
+        navigate(`/product/installment/${productId}`);
+    };
+
+
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-12 py-8">
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                     <div className="aspect-square relative">
                         <img
                             src={selectedColor && colorOptions.find(color => color.colorName === selectedColor)?.imagePath || product?.image}
                             alt={product?.productName}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-fill"
                         />
                     </div>
                     <div className="grid grid-cols-6 gap-2">
@@ -362,6 +402,7 @@ const ProductDetail = () => {
                             size="large"
                             type="default"
                             className="border-blue-500 text-blue-500 w-full flex flex-col items-center"
+                            onClick={() => handleInstallClick()}
                         >
                             MUA TRẢ GÓP
                         </Button>
@@ -375,15 +416,36 @@ const ProductDetail = () => {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-4 mt-8">
-                    <p className="text-lg">
-                        {product?.description}
-                    </p>
-                    <h1 className="text-2xl font-bold">{product?.productName}</h1>
-                    <img
-                        src={product?.image}
-                        alt={product?.productName}
-                        className="w-full h-[200px] object-contain rounded-md"
-                    />
+                    {productContents.slice(0, isExpanded ? productContents.length : 1).map((content, index) => {
+                        const { title, contentText, contentImage } = content;
+                        if (!title && !contentText && !contentImage) {
+                            return null;
+                        }
+
+                        return (
+                            <div key={index} className="space-y-4">
+                                {title && <h1 className="text-2xl font-bold">{title}</h1>}
+                                {contentText && <p className="text-lg">{contentText}</p>}
+                                {contentImage && (
+                                    <img
+                                        src={contentImage}
+                                        alt={title || "Product Content"}
+                                        className="w-full h-[200px] object-contain rounded-md"
+                                    />
+                                )}
+                            </div>
+                        );
+                    })}
+
+                    <div className="flex justify-center mt-4">
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="px-4 py-2 border border-orange-500 text-orange-500 rounded-md hover:bg-orange-100"
+                        >
+                            {isExpanded ? "Thu gọn" : "Xem thêm"}
+                        </button>
+                    </div>
+
                 </div>
 
                 <div className="lg:col-span-1 space-y-4 mt-8">
@@ -395,7 +457,7 @@ const ProductDetail = () => {
                     <Slider size={24} />
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -1,6 +1,4 @@
-import { Layout, Card, Button, Badge, Typography, Row, Col } from 'antd';
-import { PhoneOutlined } from '@ant-design/icons';
-import Slider from './Slider';
+import { Layout, Row, Col } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import HeaderContent from './HeaderContent';
 import { useState, useEffect } from 'react';
@@ -8,7 +6,6 @@ import ProductHandleApi from '../../apis/ProductHandleApi';
 import { Apple } from 'lucide-react';
 
 const { Content } = Layout;
-const { Title, Text } = Typography;
 
 interface IProduct {
     productID: number;
@@ -115,20 +112,20 @@ function ProductByCategory() {
                             <div className="relative mb-2">
                                 <div className="flex flex-col">
                                     <div className="relative w-fit">
-                                        <div className="bg-[#006838] flex items-center h-8">
+                                        <div className="bg-[#FFA500] flex items-center h-8">
                                             <div className="flex items-center pl-2.5 pr-4">
                                                 <Apple className="w-3.5 h-3.5 text-white" />
                                                 <span className="text-white text-[13px] font-medium uppercase tracking-wider ml-2.5">{model.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
                                             </div>
                                             <div
-                                                className="absolute top-0 right-[-7px] h-full w-[8px] bg-[#006838]"
+                                                className="absolute top-0 right-[-7px] h-full w-[8px] bg-[#FFA500]"
                                                 style={{
                                                     clipPath: 'polygon(0 100%, 0 0, 100% 100%)'
                                                 }}
                                             />
                                         </div>
                                     </div>
-                                    <div className="h-[2px] bg-[#006838] flex-grow mb-[0px]" />
+                                    <div className="h-[2px] bg-[#FFA500] flex-grow mb-[0px]" />
                                 </div>
                             </div>
 
@@ -141,7 +138,7 @@ function ProductByCategory() {
                             >
                                 {filteredGroupedProducts[model].slice(0, window.innerWidth <= 768 ? 2 : 6).map((product) => (
                                     <div
-                                        className="border border-transparent hover:border-[#006838] rounded-sm p-3 transition-colors"
+                                        className="border border-transparent hover:border-[#FFA500] rounded-sm p-3 transition-colors"
                                         key={product.productID}
                                         onClick={() => handleProductClick(product.productID)}
                                     >
@@ -154,7 +151,7 @@ function ProductByCategory() {
                                                 className="w-full h-[200px] object-contain rounded-md"
                                             />
                                         </div>
-                                        <h3 className="text-sm font-medium mb-2 group-hover:text-[#006838]">
+                                        <h3 className="text-sm font-medium mb-2 group-hover:text-[#FFA500]">
                                             {product.productName}
                                         </h3>
                                         <p className="text-red-500 font-bold mb-2">{formatPrice(product.price)}</p>

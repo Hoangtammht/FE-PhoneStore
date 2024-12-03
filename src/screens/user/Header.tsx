@@ -176,17 +176,16 @@ function Header() {
 
     return (
         <header className="bg-orange-600 text-white p-4">
-            <div className="container mx-auto flex items-center justify-between">
 
+            <div className="container mx-auto flex items-center justify-between">
                 <div className="lg:hidden flex items-center mr-2">
                     <MenuOutlined
                         className="text-xl cursor-pointer"
                         onClick={handleMenuToggle}
                     />
                 </div>
-
                 <div className="bg-black p-4 inline-flex items-center space-x-8 rounded-md w-full lg:w-auto">
-                    <h1
+                <h1
                         className="text-lg font-bold text-white cursor-pointer"
                         onClick={handleLogoClick}
                     >
