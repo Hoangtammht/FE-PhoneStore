@@ -537,7 +537,7 @@ const ProductManagement = () => {
                   className="border border-gray-300 rounded-lg p-4 hover:shadow-lg transition-shadow bg-gray-50"
                   onClick={() => handleProductContentClick(product)}>
                   <img src={product.image} alt={product.productName} className="w-full h-40 object-contain rounded-md mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{product.productName}</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-black">{product.productName}</h3>
                   <p className="text-lg font-bold text-blue-500 mb-3">{product.price.toLocaleString("vi-VN")} đ</p>
                   <p className={`flex items-center gap-2 text-sm font-medium ${product.status === 1 ? "text-green-500" : "text-red-500"}`}>
                     {product.status === 1 ? "Còn hàng" : "Hết hàng"}

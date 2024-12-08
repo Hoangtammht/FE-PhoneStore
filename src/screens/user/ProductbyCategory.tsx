@@ -56,9 +56,15 @@ function ProductByCategory() {
 
     useEffect(() => {
         if (categoryID) {
+            setSelectedModel(null);
+            setSelectedPriceRange({ min: undefined, max: undefined });
+            setProducts([]);
+            setLoading(true); 
+    
             fetchProducts(parseInt(categoryID));
         }
     }, [categoryID]);
+    
 
     const handleProductClick = (productId: string) => {
         navigate(`/product/${productId}`);
