@@ -37,17 +37,11 @@ function Banner() {
           <img
             src={banner.imageUrl || "https://media.vneconomy.vn/w800/images/upload/2024/09/10/apple-iphone-16-pro-series.jpg"}
             alt={banner.description}
-            className="w-full h-[200px] sm:h-[300px] md:h-[320px] object-fill rounded-md cursor-pointer"
+            className="w-full h-[200px] sm:h-[300px] sm:w-full md:h-[320px] object-contain rounded-md cursor-pointer"
           />
         </div>
       ))}
     </Carousel>
-
-
-
-
-
-
   );
 }
 

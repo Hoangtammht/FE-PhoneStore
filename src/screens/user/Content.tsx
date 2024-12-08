@@ -1,16 +1,15 @@
-import { Layout, Card, Button, Typography, Row, Col, Spin } from 'antd';
-import { 
-    AppstoreOutlined, 
-    ClockCircleOutlined, 
-    DollarOutlined, 
-    LaptopOutlined, 
-    PhoneOutlined, 
-    QuestionCircleOutlined, 
-    TabletOutlined 
+import { Layout, Typography, Row, Col, Spin } from 'antd';
+import {
+    AppstoreOutlined,
+    ClockCircleOutlined,
+    DollarOutlined,
+    LaptopOutlined,
+    PhoneOutlined,
+    QuestionCircleOutlined,
+    TabletOutlined
 } from '@ant-design/icons';
 import { Apple } from 'lucide-react';
 import Banner from './Banner';
-import Slider from './Slider';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ProductHandleApi from '../../apis/ProductHandleApi';
@@ -19,7 +18,7 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 interface IProduct {
-    productID: number;
+    productID: string;
     categoryID: number;
     productName: string;
     image: string;
@@ -31,7 +30,10 @@ interface IProduct {
 
 const groupByModel = (products: IProduct[]) => {
     return products.reduce((acc, product) => {
-        const model = product.productName.split(' ')[1];
+        const words = product.productName.split(' ');
+
+        let model = words.slice(0, 2).join(' ');
+
         if (!acc[model]) {
             acc[model] = [];
         }
@@ -54,14 +56,15 @@ const categories = [
 function ContentPage() {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [products, setProducts] = useState<IProduct[]>([]);
+    const [bestSellers, setBestSellers] = useState<IProduct[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
 
     const fetchProducts = async () => {
         try {
             const response = await ProductHandleApi(
-                `/api/product/getProductByCategoryID?categoryID=1`, 
-                {}, 
+                `/api/product/getProductByCategoryID?categoryID=1`,
+                {},
                 'get'
             );
             setProducts(response.data);
@@ -80,8 +83,22 @@ function ContentPage() {
         };
     };
 
+    const fetchBestSellers = async () => {
+        try {
+            const response = await ProductHandleApi(
+                `/api/product/getTopProduct`,
+                {},
+                'get'
+            );
+            setBestSellers(response.data);
+        } catch (error) {
+            console.error("Failed to fetch best sellers:", error);
+        }
+    };
+
     useEffect(() => {
         fetchProducts();
+        fetchBestSellers();
     }, []);
 
     useEffect(() => {
@@ -97,7 +114,7 @@ function ContentPage() {
         navigate(`/product/category/${categoryID}`);
     };
 
-    const handleProductClick = (productId: number) => {
+    const handleProductClick = (productId: string) => {
         navigate(`/product/${productId}`);
     };
 
@@ -134,7 +151,7 @@ function ContentPage() {
                             <div className="flex items-center pl-2.5 pr-4">
                                 <Apple className="w-3.5 h-3.5 text-white" />
                                 <span className="text-white text-[13px] font-medium uppercase tracking-wider ml-2.5">
-                                    IPhone {model}
+                                    {model}
                                 </span>
                             </div>
                             <div
@@ -146,6 +163,13 @@ function ContentPage() {
                         </div>
                     </div>
                     <div className="h-[2px] bg-[#FFA500] flex-grow mb-[0px]" />
+                    {bestSellers.length < 0 && (<span
+                        className="absolute right-0 px-2 text-[#FFA500] text-sm font-semibold uppercase tracking-wide cursor-pointer"
+                        onClick={() => navigate('/product/productquote')}
+                    >
+                        Xem bảng báo giá
+                    </span>
+                    )}
                 </div>
             </div>
 
@@ -188,37 +212,103 @@ function ContentPage() {
     const groupedProducts = groupByModel(products);
 
     return (
-        <Content className="container mx-auto py-6">
-            <Row gutter={[24, 24]}>
-                <Col span={24} lg={18}>
-                    <Banner />
-                    <div className="w-full flex justify-center overflow-x-auto rounded-lg pl-3 mt-4 mb-4 scroll-smooth">
-                        <div className="flex space-x-4 p-4 lg:hidden flex-nowrap">
-                            {renderCategories()}
+        <Content className="container mx-auto py-6 max-w-[1200px]">
+            <Banner />
+            <div className="w-full flex justify-center overflow-x-auto rounded-lg pl-3 mt-4 mb-4 scroll-smooth">
+                <div className="flex space-x-4 p-4 lg:hidden flex-nowrap">
+                    {renderCategories()}
+                </div>
+            </div>
+            <Row gutter={[24, 24]} className="w-full">
+                <Col span={24} lg={24}>
+                    {bestSellers.length > 0 && (
+                        <div className="relative mb-2">
+                            <div className="flex flex-col">
+                                <div className="relative w-fit">
+                                    <div className="bg-[#FFA500] flex items-center h-8">
+                                        <div className="flex items-center pl-2.5 pr-4">
+                                            <span className="text-white text-[13px] font-medium uppercase tracking-wider ml-2.5">
+                                                Best Seller
+                                            </span>
+                                        </div>
+                                        <div
+                                            className="absolute top-0 right-[-7px] h-full w-[8px] bg-[#FFA500]"
+                                            style={{
+                                                clipPath: 'polygon(0 100%, 0 0, 100% 100%)'
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="h-[2px] bg-[#FFA500] flex-grow mb-[0px]" />
+                                <span
+                                    className="absolute right-0 px-2 text-[#FFA500] text-sm font-semibold uppercase tracking-wide cursor-pointer"
+                                    onClick={() => navigate('/product/productquote')}
+                                >
+                                    Xem bảng báo giá
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+                    {bestSellers.length > 0 && (
+                        <div
+                            className="grid gap-1"
+                            style={{
+                                gridTemplateColumns: `repeat(${windowWidth <= 768 ? 2 : 6}, minmax(180px, 1fr))`,
+                                maxWidth: '100%',
+                            }}
+                        >
+                            {bestSellers.map((product) => (
+                                <div
+                                    className="border border-transparent hover:border-[#FFA500] rounded-sm p-3 transition-colors cursor-pointer"
+                                    key={product.productID}
+                                    onClick={() => handleProductClick(product.productID)}
+                                >
+                                    <div className="relative mb-2">
+                                        <img
+                                            src={product.image}
+                                            alt={product.productName}
+                                            loading="lazy"
+                                            className="w-full h-[200px] object-contain rounded-md"
+                                        />
+                                    </div>
+                                    <h3 className="text-sm font-medium mb-2 group-hover:text-[#FFA500] truncate">
+                                        {product.productName}
+                                    </h3>
+                                    <p className="text-red-500 font-bold mb-2">{formatPrice(product.price)}</p>
+                                    <div className="text-xs text-gray-500 space-y-0.5">
+                                        <span>Đặt mua - Giao hàng miễn phí</span>
+                                        <br />
+                                        <span>Trả Góp dễ dàng - LS Ưu Đãi</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     {loading ? (
-                        <div className="flex justify-center items-center py-6">
+                        <div className="flex justify-center items-center py-3">
                             <Spin size="large" />
                         </div>
                     ) : (
                         <>
                             {Object.keys(groupedProducts).length === 0 ? (
-                                <div className="text-center py-6 mt-8">
+                                <div className="text-center py-1 mt-4">
                                     <Title level={4}>Không có sản phẩm nào trong danh mục này</Title>
                                 </div>
                             ) : (
-                                Object.keys(groupedProducts).map((model) =>
-                                    renderProductGroup(model, groupedProducts[model])
-                                )
+                                Object.keys(groupedProducts).map((model) => (
+                                    <div className="mb-4" key={model}>
+                                        {renderProductGroup(model, groupedProducts[model])}
+                                    </div>
+                                ))
                             )}
                         </>
                     )}
                 </Col>
-                <Slider size={6} />
             </Row>
         </Content>
+
     );
 }
 

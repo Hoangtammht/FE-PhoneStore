@@ -6,6 +6,7 @@ import LayoutHome from '../screens/user/Layout';
 import ProductByCategory from '../screens/user/ProductbyCategory';
 import Installment from '../screens/user/Installment';
 import { ProductProvider } from '../screens/user/ProductContext';
+import ProductQuote from 'screens/user/ProductQuote';
 
 
 const AuthRouter = () => {
@@ -17,6 +18,7 @@ const AuthRouter = () => {
         <Route path="/product/:productId" element={<LayoutHome><ProductDetail /></LayoutHome>} />
         <Route path="/product/category/:categoryID" element={<LayoutHome><ProductByCategory /></LayoutHome>} />
         <Route path="/product/installment/:productId" element={<LayoutHome><Installment /></LayoutHome>} />
+        <Route path="/product/productquote" element={<LayoutHome><ProductQuote /></LayoutHome>} />
       </Routes>
       </ProductProvider>
     );

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-const baseURL = `http://localhost:8080`;
+const baseURL = `https://be-phonestore-c5rh.onrender.com`;
 
 const AxiosClient = axios.create({
     baseURL,

@@ -6,7 +6,7 @@ interface HeaderContentProps {
 function HeaderContent({ models, onModelSelect }: HeaderContentProps) {
     return (
         <>
-            <div className="flex bg-yellow-400 overflow-hidden">
+            {/* <div className="flex bg-yellow-400 overflow-hidden">
                 <img
                     src="https://hoangphucstore.com/assets/uploads/images/N93mG08l74r3_temp-002.jpg"
                     alt="Trade-in Promotion"
@@ -19,9 +19,7 @@ function HeaderContent({ models, onModelSelect }: HeaderContentProps) {
                 />
             </div>
 
-
-
-
+ */}
             <div className="w-full flex justify-center overflow-x-auto rounded-lg border mt-4 mb-4">
                 <div className="flex w-max space-x-4 p-4">
                     {models.map((model) => (

@@ -13,11 +13,10 @@ const loadingIcon = <LoadingOutlined style={{ fontSize: 36, color: "#f56c6c" }} 
 
 
 interface ColorOption {
-    productColorID: number;
+    productColorID: string;
     colorName: string;
     price: number;
     imagePath: string;
-    colorHex: string;
 }
 
 interface StorageOption {
@@ -26,13 +25,12 @@ interface StorageOption {
 }
 
 interface Product {
-    productID: number;
+    productID: string;
     categoryID: number;
     productName: string;
     image: string;
     description: string;
     price: number;
-    stock: number;
     status: number;
 }
 
@@ -44,20 +42,20 @@ interface OrderNowModalProps {
     storages: StorageOption[];
     selectedColor: string;
     selectedStorage: string;
-    selectedColorID: number;
+    selectedColorID: string;
     selectedStorageID: number;
     setSelectedColor: (color: string) => void;
     setSelectedStorage: (storage: string) => void;
-    setSelectedColorID: (colorID: number) => void;
+    setSelectedColorID: (colorID: string) => void;
     setSelectedStorageID: (storageID: number) => void;
-    variantID: number | undefined;
+    variantID: string | undefined;
     onSubmit: (formData: {
         name: string;
         phone: string;
         message: string;
         color: string;
         storage: string;
-        colorID: number;
+        colorID: string;
         storageID: number;
     }) => void;
     price: number | undefined;
@@ -120,7 +118,8 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
             customerID: customerID,
             orderID: orderID, 
             orderDetailID: orderDetailID,
-            content: formData.message
+            content: formData.message,
+            orderType: 'normal'
         };
 
         try {

@@ -5,11 +5,14 @@ import { useDispatch } from 'react-redux';
 import ProductHandleApi from 'apis/ProductHandleApi';
 import { localDataNames } from 'constants/appInfos';
 import { addAuth } from 'reduxs/reducers/authReducer';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     form.setFieldsValue({ userName: '' });
@@ -31,6 +34,7 @@ const Login: React.FC = () => {
           })
         );
         message.success('Đăng nhập thành công!');
+        navigate('/dashboard');
       } else {
         throw new Error('Thông tin đăng nhập không hợp lệ.');
       }

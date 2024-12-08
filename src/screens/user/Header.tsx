@@ -10,7 +10,7 @@ import './Header.css';
 const { SubMenu } = Menu;
 
 interface IProduct {
-    productID: number;
+    productID: string;
     categoryID: number;
     productName: string;
     image: string;
@@ -22,7 +22,7 @@ interface IProduct {
 
 type GroupedProducts = {
     [model: string]: {
-        productID: number;
+        productID: string;
         categoryID: number;
         productName: string;
     }[];
@@ -129,7 +129,7 @@ function Header() {
             <ul className="pl-4 space-y-2">
                 {Object.entries(groupedProducts).map(([model, products]) => {
                     const typedProducts = products as {
-                        productID: number;
+                        productID: string;
                         categoryID: number;
                         productName: string;
                     }[];
@@ -175,8 +175,7 @@ function Header() {
     );
 
     return (
-        <header className="bg-orange-600 text-white p-4">
-
+        <header className="bg-[#FFA500] text-white p-4">
             <div className="container mx-auto flex items-center justify-between">
                 <div className="lg:hidden flex items-center mr-2">
                     <MenuOutlined
@@ -208,7 +207,7 @@ function Header() {
 
                 <Menu
                     mode="horizontal"
-                    className="bg-orange-600 text-white border-0 hidden lg:block"
+                    className="bg-[#FFA500] text-white border-0 hidden lg:block"
                 >
                     <SubMenu key="phone" icon={<PhoneOutlined />} title="ĐIỆN THOẠI" className="text-white" onTitleClick={() => handleProductClick(1)}>
                         {Object.entries(groupedProducts).map(([model, products]) => (

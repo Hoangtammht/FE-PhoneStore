@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 
 interface Product {
+  productID: string,
+  variantID: string,
   productName: string;
   image: string;
   price: number;
@@ -18,6 +20,8 @@ const getProductFromStorage = (): Product => {
   return storedProduct
     ? JSON.parse(storedProduct)
     : {
+        productID: '',
+        variantID: '',
         productName: '',
         image: '',
         price: 0,

@@ -1,7 +1,6 @@
-import { Card, Button, Badge, Table } from 'antd';
+import { Card, Button, Table } from 'antd';
 import { useEffect, useState } from 'react'
 import { Star, Package, Clock, Shield, Truck } from 'lucide-react'
-import Slider from './Slider';
 import './ProductDetail.css'
 import ProductHandleApi from '../../apis/ProductHandleApi';
 import OrderNowModal from './OrderNowModal';
@@ -9,22 +8,20 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useProduct } from './ProductContext';
 
 interface IProduct {
-    productID: number;
+    productID: string;
     categoryID: number;
     productName: string;
     image: string;
     description: string;
     price: number;
-    stock: number;
     status: number;
 }
 
 interface ColorOption {
-    productColorID: number;
+    productColorID: string;
     colorName: string;
     price: number;
     imagePath: string;
-    colorHex: string;
 }
 
 interface StorageOption {
@@ -32,33 +29,32 @@ interface StorageOption {
     storageCapacity: string
 }
 
-interface Promotion {
-    productID: number;
-    promotionDescription: string;
-    discountValue: number;
-    startDate: string;
-    endDate: string;
-    active: boolean;
-}
+// interface Promotion {
+//     productID: string;
+//     promotionDescription: string;
+//     discountValue: number;
+//     startDate: string;
+//     endDate: string;
+//     active: boolean;
+// }
 
 interface Specification {
-    productID: number;
+    productID: string;
     specName: string;
     specValue: string;
 }
 
 interface ProductVariant {
-    variantID: number;
-    productID: number;
-    productColorID: number;
+    variantID: string;
+    productID: string;
+    productColorID: string;
     productStorageID: number;
     price: number;
-    stock: number;
 }
 
 interface ProductContent {
     contentID: number;
-    productID: number;
+    productID: string;
     title: string | null;
     contentText: string | null;
     contentImage: string | null;
@@ -97,10 +93,10 @@ const ProductDetail = () => {
     const [selectedStorage, setSelectedStorage] = useState<string>('');
     const [selectedColor, setSelectedColor] = useState<string>('');
     const [selectedStorageID, setSelectedStorageID] = useState<number>(0);
-    const [selectedColorID, setSelectedColorID] = useState<number>(0);
+    const [selectedColorID, setSelectedColorID] = useState<string>('');
     const [colorOptions, setColorOptions] = useState<ColorOption[]>([]);
     const [storages, setStorages] = useState<StorageOption[]>([]);
-    const [promotions, setPromotions] = useState<Promotion[]>([]);
+    // const [promotions, setPromotions] = useState<Promotion[]>([]);
     const [specifications, setSpecifications] = useState<Specification[]>([]);
     const [productVariant, setProductVariant] = useState<ProductVariant | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -135,14 +131,14 @@ const ProductDetail = () => {
         }
     };
 
-    const fetchPromotions = async () => {
-        try {
-            const response = await ProductHandleApi(`/api/product/getPromotionOfProduct?productID=${productId}`);
-            setPromotions(response.data);
-        } catch (error) {
-            console.error("Failed to fetch promotions:", error);
-        }
-    };
+    // const fetchPromotions = async () => {
+    //     try {
+    //         const response = await ProductHandleApi(`/api/product/getPromotionOfProduct?productID=${productId}`);
+    //         setPromotions(response.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch promotions:", error);
+    //     }
+    // };
 
     const fetchSpecifications = async () => {
         try {
@@ -195,7 +191,7 @@ const ProductDetail = () => {
         if (productId) {
             fetchProducts();
             fetchColorOptions();
-            fetchPromotions();
+            // fetchPromotions();
             fetchSpecifications();
             fetchStorages();
             fetchProductContents();
@@ -238,7 +234,9 @@ const ProductDetail = () => {
     };
 
     const productInstall = {
+        productID: product?.productID || "",
         productName: product?.productName || "",
+        variantID: productVariant?.variantID || "",
         image: product?.image || "",
         price: productVariant?.price || 0,
     };
@@ -250,7 +248,7 @@ const ProductDetail = () => {
 
 
     return (
-        <div className="container mx-auto px-12 py-8">
+        <div className="container mx-auto px-12 py-8 max-w-[1100px]">
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                     <div className="aspect-square relative">
@@ -277,26 +275,19 @@ const ProductDetail = () => {
                     </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-3">
                     <div>
-                        <h1 className="text-2xl font-bold mb-2">{product?.productName}</h1>
-                        <div className="flex items-center gap-4 mb-2">
-                            <div className="flex items-center">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                                ))}
-                                <span className="ml-2 text-sm text-gray-600">14.213 đánh giá</span>
-                            </div>
-                            <div className="text-sm text-gray-600">124.400 lượt xem</div>
-                        </div>
+                        <h1 className="text-2xl font-bold">{product?.productName}</h1>
                     </div>
 
                     <div className="text-3xl font-bold text-red-600">
-                        {productVariant ? formatPrice(productVariant.price) : formatPrice(0)}đ
+                        {productVariant ? formatPrice(productVariant.price) : formatPrice(product?.price || 0)}đ
                     </div>
 
                     <div>
-                        <h3 className="text-sm font-medium mb-2">Bạn đang xem phiên bản: {selectedStorage}</h3>
+                        {storages.length > 0 && (
+                            <h3 className="text-sm font-medium mb-2">Bạn đang xem phiên bản: {selectedStorage}</h3>
+                        )}
                         <div className="grid grid-cols-3 gap-2">
                             {storages.map((storage) => (
                                 <Button
@@ -316,7 +307,9 @@ const ProductDetail = () => {
                     </div>
 
                     <div>
-                        <h3 className="text-sm font-medium mb-2">Màu sắc</h3>
+                        {colorOptions.length > 0 && (
+                            <h3 className="text-sm font-medium mb-2">Màu sắc</h3>
+                        )}
                         <div className="grid grid-cols-2 gap-2">
                             {colorOptions.map((color) => (
                                 <Button
@@ -336,16 +329,24 @@ const ProductDetail = () => {
                     </div>
 
                     <Card className="bg-red-50 border-red-200">
-                        <div className="p-4">
+                        <div className="p-4 space-y-3">
                             <h3 className="font-bold text-red-600 mb-2">Khuyến mãi khi mua</h3>
-                            <ul className="space-y-2 text-sm">
-                                {promotions.map((promo, index) => (
-                                    <li key={index} className="flex gap-2">
-                                        <span className="text-blue-600">{index + 1}</span>
-                                        <span>{promo.promotionDescription} - Giảm {promo.discountValue}%</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <div className="flex items-start gap-2">
+                                <Package className="w-5 h-5 text-blue-600" />
+                                <span>Máy Likenew 99% gồm : Hộp, Sạc nhanh 18W, Cáp, Tai nghe.</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <Clock className="w-5 h-5 text-blue-600" />
+                                <span>Dùng thử 7 ngày "Miễn phí" (Trả máy hoàn 100% tiền)</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <Shield className="w-5 h-5 text-blue-600" />
+                                <span>60 ngày 1 ĐỔI 1, Bảo hành "toàn diện" 12 tháng tất cả phần cứng trên máy</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <Truck className="w-5 h-5 text-blue-600" />
+                                <span>Ship hàng nhanh chóng - Cài đặt & Thanh toán tại nhà</span>
+                            </div>
                         </div>
                     </Card>
 
@@ -394,7 +395,7 @@ const ProductDetail = () => {
                                 setSelectedColorID={setSelectedColorID}
                                 selectedStorageID={selectedStorageID}
                                 setSelectedStorageID={setSelectedStorageID}
-                                price={productVariant?.price}
+                                price={productVariant ? productVariant.price : product?.price || 0}
                                 onSubmit={handleOrderSubmit}
                             />
                         )}
@@ -448,14 +449,16 @@ const ProductDetail = () => {
 
                 </div>
 
-                <div className="lg:col-span-1 space-y-4 mt-8">
-                    <Card>
-                        <div className="p-2">
-                            <Table columns={columns} dataSource={formattedData} pagination={false} rowClassName={rowClassName} />
-                        </div>
-                    </Card>
-                    <Slider size={24} />
-                </div>
+
+                {specifications.length > 0 && (
+                    <div className="lg:col-span-1 space-y-4 mt-8">
+                        <Card>
+                            <div className="p-2">
+                                <Table columns={columns} dataSource={formattedData} pagination={false} rowClassName={rowClassName} />
+                            </div>
+                        </Card>
+                    </div>
+                )}
             </div>
         </div >
     );

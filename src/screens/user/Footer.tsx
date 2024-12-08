@@ -86,9 +86,6 @@ function FooterPage() {
       </div>
 
 
-
-
-
       <div className="mb-12 rounded-lg overflow-hidden shadow-lg">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1959.6111722078827!2d106.68!3d10.76!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQ1JzM2LjAiTiAxMDbCsDQwJzQ4LjAiRQ!5e0!3m2!1sen!2s!4v1599999999999!5m2!1sen!2s"
@@ -152,7 +149,18 @@ function FooterPage() {
                 </div>
                 <div>
                   <Text className="text-gray-300">
-                    Phản hồi chất lượng dịch vụ: 0906.712.639
+                    Phản hồi chất lượng dịch vụ:
+                    <a
+                      href="zalo://chat?phone=0946219139"
+                      onClick={(e) => {
+                        setTimeout(() => {
+                          window.open("https://zalo.me/0946219139", "_blank");
+                        }, 1000);
+                      }}
+                      className="text-blue-400 hover:underline ml-2"
+                    >
+                      0946.219.139
+                    </a>
                   </Text>
                 </div>
                 <div className="flex items-center gap-2">
