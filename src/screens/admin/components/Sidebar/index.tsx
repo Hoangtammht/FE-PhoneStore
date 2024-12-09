@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
-import Logo from '../../../../assets/logo.png';
+import Logo from '../../../../assets/logo2.png';
 
 interface SidebarProps {
   sidebarOpen: boolean;
