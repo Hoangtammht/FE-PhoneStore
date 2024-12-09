@@ -34,7 +34,7 @@ const Login: React.FC = () => {
           })
         );
         message.success('Đăng nhập thành công!');
-        navigate('/dashboard');
+        navigate('/products');
       } else {
         throw new Error('Thông tin đăng nhập không hợp lệ.');
       }

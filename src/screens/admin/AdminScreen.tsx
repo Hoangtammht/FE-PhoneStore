@@ -19,6 +19,7 @@ import DefaultLayout from './layout/DefaultLayout';
 import './css/style.css';
 import './css/satoshi.css';
 import 'flatpickr/dist/flatpickr.min.css';
+import QuoteManagement from './pages/Form/QuoteManagement';
 
 function AdminScreen() {
     const [loading, setLoading] = useState<boolean>(true);
@@ -37,7 +38,7 @@ function AdminScreen() {
     ) : (
         <DefaultLayout>
             <Routes>
-                <Route
+                {/* <Route
                     path="/dashboard"
                     element={
                         <>
@@ -45,7 +46,7 @@ function AdminScreen() {
                             <ECommerce />
                         </>
                     }
-                />
+                /> */}
                 <Route
                     path="/products"
                     element={
@@ -79,6 +80,15 @@ function AdminScreen() {
                         <>
                             <PageTitle title="Admin Dashboard | Cam phone" />
                             <FormLayout />
+                        </>
+                    }
+                />
+                <Route
+                    path="/forms/quote"
+                    element={
+                        <>
+                            <PageTitle title="Admin Dashboard | Cam phone" />
+                            <QuoteManagement />
                         </>
                     }
                 />

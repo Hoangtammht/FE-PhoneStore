@@ -1,7 +1,7 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-const baseURL = `https://be-phonestore-c5rh.onrender.com`;
+const baseURL = `https://be-phonestore-0vcz.onrender.com`;
 
 const AxiosClient = axios.create({
     baseURL,

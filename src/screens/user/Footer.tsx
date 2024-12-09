@@ -50,7 +50,7 @@ function FooterPage() {
             centerPadding="0"
             responsive={[
               {
-                breakpoint: 1024, // Web
+                breakpoint: 1024,
                 settings: {
                   slidesToShow: 5,
                 },
@@ -88,14 +88,16 @@ function FooterPage() {
 
       <div className="mb-12 rounded-lg overflow-hidden shadow-lg">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1959.6111722078827!2d106.68!3d10.76!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQ1JzM2LjAiTiAxMDbCsDQwJzQ4LjAiRQ!5e0!3m2!1sen!2s!4v1599999999999!5m2!1sen!2s"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.6530961110193!2d106.65209047586868!3d10.761196259472792!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f5b16c2eadf%3A0xd7d850c9f752a1f4!2sCamphone!5e0!3m2!1sen!2s!4v1733715983348!5m2!1sen!2s"
           width="100%"
           height="300"
           style={{ border: 0 }}
           allowFullScreen
           loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
         />
       </div>
+
 
       <Footer className="bg-black text-white pt-12 pb-6">
         <div className="container mx-auto px-4">
@@ -145,28 +147,28 @@ function FooterPage() {
               <div className="space-y-4 text-left">
                 <div className="flex items-center gap-2">
                   <PhoneOutlined className="text-green-500" />
-                  <Text className="text-white">0931.692.639 - 0932.726.593</Text>
+                  <Text className="text-white">0962.533.939</Text>
                 </div>
                 <div>
                   <Text className="text-gray-300">
                     Phản hồi chất lượng dịch vụ:
                     <a
-                      href="zalo://chat?phone=0946219139"
+                      href="zalo://chat?phone=0962533939"
                       onClick={(e) => {
                         setTimeout(() => {
-                          window.open("https://zalo.me/0946219139", "_blank");
+                          window.open("https://zalo.me/0962533939", "_blank");
                         }, 1000);
                       }}
                       className="text-blue-400 hover:underline ml-2"
                     >
-                      0946.219.139
+                      0962.533.939
                     </a>
                   </Text>
                 </div>
                 <div className="flex items-center gap-2">
                   <ClockCircleOutlined className="text-blue-500" />
                   <Text className="text-gray-300">
-                    Tất cả các showroom: Từ 09h00 - 21h00 (T7/7)
+                    Tất cả các showroom: Từ 09h00 - 21h00
                   </Text>
                 </div>
               </div>
@@ -180,7 +182,7 @@ function FooterPage() {
                 <div className="flex items-start gap-2">
                   <EnvironmentOutlined className="text-red-500 mt-1" />
                   <Text className="text-white">
-                    ........................................
+                    1056 đường 3 tháng 2, P12, Q11
                   </Text>
                 </div>
                 <Text className="text-gray-300">

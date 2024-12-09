@@ -141,7 +141,6 @@ const CustomerImage = () => {
         <Button
           type="primary"
           danger
-          size="small"
           onClick={() => handleDeleteCustomerImage(record.customerImageID)}
         >
           Xóa

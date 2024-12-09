@@ -333,15 +333,15 @@ const ProductDetail = () => {
                             <h3 className="font-bold text-red-600 mb-2">Khuyến mãi khi mua</h3>
                             <div className="flex items-start gap-2">
                                 <Package className="w-5 h-5 text-blue-600" />
-                                <span>Máy Likenew 99% gồm : Hộp, Sạc nhanh 18W, Cáp, Tai nghe.</span>
+                                <span>Máy Likenew 99% gồm : Tặng cường lực ốp lưng, Sạc nhanh 20W.</span>
                             </div>
                             <div className="flex items-start gap-2">
                                 <Clock className="w-5 h-5 text-blue-600" />
-                                <span>Dùng thử 7 ngày "Miễn phí" (Trả máy hoàn 100% tiền)</span>
+                                <span>Bảo hành "toàn diện" 6 tháng tất cả phần cứng trên máy</span>
                             </div>
                             <div className="flex items-start gap-2">
                                 <Shield className="w-5 h-5 text-blue-600" />
-                                <span>60 ngày 1 ĐỔI 1, Bảo hành "toàn diện" 12 tháng tất cả phần cứng trên máy</span>
+                                <span>30 ngày 1 ĐỔI 1</span>
                             </div>
                             <div className="flex items-start gap-2">
                                 <Truck className="w-5 h-5 text-blue-600" />
@@ -354,15 +354,15 @@ const ProductDetail = () => {
                         <div className="p-4 space-y-3">
                             <div className="flex items-start gap-2">
                                 <Package className="w-5 h-5 text-blue-600" />
-                                <span>Máy Likenew 99% gồm : Hộp, Sạc nhanh 18W, Cáp, Tai nghe.</span>
+                                <span>Máy Mới 100% gồm : Tặng ốp cường lực.</span>
                             </div>
                             <div className="flex items-start gap-2">
                                 <Clock className="w-5 h-5 text-blue-600" />
-                                <span>Dùng thử 7 ngày "Miễn phí" (Trả máy hoàn 100% tiền)</span>
+                                <span>Bảo hành "toàn diện" 12 tháng tất cả phần cứng trên máy</span>
                             </div>
                             <div className="flex items-start gap-2">
                                 <Shield className="w-5 h-5 text-blue-600" />
-                                <span>60 ngày 1 ĐỔI 1, Bảo hành "toàn diện" 12 tháng tất cả phần cứng trên máy</span>
+                                <span>30 ngày 1 ĐỔI 1</span>
                             </div>
                             <div className="flex items-start gap-2">
                                 <Truck className="w-5 h-5 text-blue-600" />
@@ -438,14 +438,16 @@ const ProductDetail = () => {
                         );
                     })}
 
-                    <div className="flex justify-center mt-4">
-                        <button
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            className="px-4 py-2 border border-orange-500 text-orange-500 rounded-md hover:bg-orange-100"
-                        >
-                            {isExpanded ? "Thu gọn" : "Xem thêm"}
-                        </button>
-                    </div>
+                    {productContents.length > 3 && (
+                        <div className="flex justify-center mt-4">
+                            <button
+                                onClick={() => setIsExpanded(!isExpanded)}
+                                className="px-4 py-2 border border-orange-500 text-orange-500 rounded-md hover:bg-orange-100"
+                            >
+                                {isExpanded ? "Thu gọn" : "Xem thêm"}
+                            </button>
+                        </div>
+                    )}
 
                 </div>
 

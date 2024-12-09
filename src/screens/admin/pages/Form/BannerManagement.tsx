@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table, Tag, Button, message, Modal, Input, Upload, Form } from "antd";
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from "@ant-design/icons";
 import ProductHandleApi from "apis/ProductHandleApi";
 
 interface BannerData {
@@ -47,7 +47,7 @@ const BannerManagement = () => {
       cancelText: "Hủy",
       onOk: async () => {
         setLoading(true);
-        await ProductHandleApi(`/api/product/deleteBanner?bannerID=${bannerID}`, {}, 'delete')
+        await ProductHandleApi(`/api/product/deleteBanner?bannerID=${bannerID}`, {}, "delete")
           .then(() => {
             message.success("Xóa banner thành công!");
             fetchBanners();
@@ -73,13 +73,11 @@ const BannerManagement = () => {
 
     const newBanner = {
       description: values.description,
-      imageURL: imagePreview,
+      imageUrl: imagePreview,
     };
 
     try {
-      const response = await ProductHandleApi("/api/product/addBanner",
-        newBanner
-        , 'post');
+      const response = await ProductHandleApi("/api/product/addBanner", newBanner, "post");
 
       if (response.status === 200) {
         message.success("Tạo banner thành công!");
@@ -94,7 +92,6 @@ const BannerManagement = () => {
       setLoading(false);
     }
   };
-
 
   const handleCancelModal = () => {
     setIsModalVisible(false);
@@ -124,7 +121,6 @@ const BannerManagement = () => {
     return false;
   };
 
-
   const columns = [
     {
       title: "Hình ảnh",
@@ -148,7 +144,9 @@ const BannerManagement = () => {
       dataIndex: "active",
       key: "active",
       render: (active: boolean) => (
-        <Tag color={active ? "green" : "red"}>{active ? "Hoạt động" : "Không hoạt động"}</Tag>
+        <Tag color={active ? "green" : "red"}>
+          {active ? "Hoạt động" : "Không hoạt động"}
+        </Tag>
       ),
     },
     {
@@ -157,7 +155,6 @@ const BannerManagement = () => {
       render: (_: any, record: BannerData) => (
         <Button
           type="primary"
-          size="small"
           danger
           onClick={() => handleDeleteBanner(record.bannerID)}
         >
@@ -170,36 +167,48 @@ const BannerManagement = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Quản lý Banner</h1>
-        <p className="text-gray-600">Quản lý và hiển thị các banner quảng cáo của bạn.</p>
+        <h1 className="text-2xl font-semibold text-gray-800 text-center md:text-left">
+          Quản lý Banner
+        </h1>
+        <p className="text-gray-600 text-center md:text-left">
+          Quản lý và hiển thị các banner quảng cáo của bạn.
+        </p>
       </div>
 
-      <Button
-        type="primary"
-        onClick={showCreateBannerModal}
-        className="mb-6"
-      >
-        Tạo Banner
-      </Button>
+      <div className="flex justify-center md:justify-start mb-6">
+        <Button
+          type="primary"
+          onClick={showCreateBannerModal}
+          className="w-full md:w-auto"
+        >
+          Tạo Banner
+        </Button>
+      </div>
 
-      <Table
-        dataSource={banners}
-        columns={columns}
-        rowKey="bannerID"
-        loading={loading}
-        pagination={{
-          pageSize: 5,
-          showSizeChanger: false,
-        }}
-        bordered
-        className="bg-white shadow-md rounded-lg"
-      />
+      <div className="overflow-x-auto">
+        <Table
+          dataSource={banners}
+          columns={columns}
+          rowKey="bannerID"
+          loading={loading}
+          pagination={{
+            pageSize: 5,
+            showSizeChanger: false,
+          }}
+          bordered
+          className="bg-white shadow-md rounded-lg"
+          scroll={{
+            x: 800,
+          }}
+        />
+      </div>
 
       <Modal
         title="Tạo Banner Mới"
         visible={isModalVisible}
         onCancel={handleCancelModal}
         footer={null}
+        className="max-w-full md:max-w-lg"
       >
         <Form form={form} onFinish={handleCreateBanner} layout="vertical">
           <Form.Item
@@ -214,30 +223,31 @@ const BannerManagement = () => {
             label="Hình ảnh"
             rules={[{ required: true, message: "Vui lòng tải hình ảnh!" }]}
           >
-            <Upload
-              beforeUpload={handleUpload}
-              showUploadList={false}
-            >
+            <Upload beforeUpload={handleUpload} showUploadList={false}>
               <Button icon={<UploadOutlined />}>Chọn và tải hình ảnh</Button>
             </Upload>
             {imagePreview && (
               <img
                 src={imagePreview}
                 alt="preview"
-                style={{ width: "30%", marginTop: 10 }}
+                className="w-1/3 mx-auto mt-3"
               />
             )}
           </Form.Item>
 
           {/* Nút submit */}
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              className="w-full"
+            >
               Tạo Banner
             </Button>
           </Form.Item>
         </Form>
       </Modal>
-
     </div>
   );
 };

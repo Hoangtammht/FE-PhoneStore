@@ -1,63 +1,83 @@
-const productData = [
-    {
-        series: "iPhone 15 Series",
-        products: [
-            { name: "15 128GB", price: "16.990.000", upfront: "1.699.000" },
-            { name: "15 256GB", price: "19.990.000", upfront: "1.999.000" },
-            { name: "15 Plus 128GB", price: "22.490.000", upfront: "4.498.000" },
-            { name: "15 Plus 256GB", price: "24.990.000", upfront: "4.998.000" },
-            { name: "15 Pro 128GB", price: "25.190.000", upfront: "5.038.000" },
-            { name: "15 Pro 256GB", price: "26.890.000", upfront: "5.378.000" },
-            { name: "15 Pro Max 512GB", price: "29.290.000", upfront: "5.858.000" },
-        ],
-    },
-    {
-        series: "iPhone 14 Series",
-        products: [
-            { name: "14 128GB", price: "12.790.000", upfront: "1.279.000" },
-            { name: "14 256GB", price: "13.790.000", upfront: "1.379.000" },
-            { name: "14 Plus 128GB", price: "13.490.000", upfront: "1.349.000" },
-            { name: "14 Plus 256GB", price: "14.790.000", upfront: "1.479.000" },
-            { name: "14 Pro 128GB", price: "15.290.000", upfront: "1.529.000" },
-            { name: "14 Pro 256GB", price: "16.390.000", upfront: "1.639.000" },
-            { name: "14 Pro Max 256GB", price: "19.290.000", upfront: "1.929.000" },
-        ],
-    },
-];
+import { useEffect, useState } from "react";
+import { message, Spin, Select } from "antd";
+import ProductHandleApi from "apis/ProductHandleApi";
+
+const { Option } = Select;
+
+interface Quote {
+    quoteID: number;
+    quoteCategory: string;
+    imageUrl: string;
+}
 
 function ProductQuote() {
+    const [quotes, setQuotes] = useState<Quote[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+    useEffect(() => {
+        fetchQuotes();
+    }, []);
+
+    const fetchQuotes = async () => {
+        setLoading(true);
+        try {
+            const response = await ProductHandleApi(`/api/product/getListQuote`, {}, "get");
+            setQuotes(response.data);
+
+            const iphoneCategory = response.data.find((quote: Quote) => quote.quoteCategory === 'iPhone');
+            if (iphoneCategory) {
+                setSelectedCategory(iphoneCategory.quoteCategory);
+            } else if (response.data.length > 0) {
+                setSelectedCategory(response.data[0].quoteCategory);
+            }
+        } catch (error) {
+            message.error("Không thể tải dữ liệu báo giá!");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const categories = [...new Set(quotes.map((quote) => quote.quoteCategory))];
+
     return (
-        <div className="bg-teal-500 p-4">
-            {productData.map((seriesData, index) => (
-                <div
-                    key={index}
-                    className="bg-white rounded-lg shadow-md p-4 mb-6 max-w-4xl mx-auto"
-                >
-                    <div className="flex justify-between items-center border-b pb-2 mb-2">
-                        <h3 className="text-lg font-semibold text-red-600">
-                            🔴 {seriesData.series}
-                        </h3>
-                    </div>
-                    <table className="w-full border-collapse border border-gray-300 text-sm text-gray-700">
-                        <thead>
-                            <tr className="bg-gray-200">
-                                <th className="border border-gray-300 p-2">Sản phẩm</th>
-                                <th className="border border-gray-300 p-2">Giá bán</th>
-                                <th className="border border-gray-300 p-2">Trả trước</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {seriesData.products.map((product, idx) => (
-                                <tr key={idx} className="text-center">
-                                    <td className="border border-gray-300 p-2">{product.name}</td>
-                                    <td className="border border-gray-300 p-2">{product.price}</td>
-                                    <td className="border border-gray-300 p-2">{product.upfront}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+        <div className="bg-teal-500 p-4 min-h-screen">
+            {loading ? (
+                <div className="flex justify-center items-center">
+                    <Spin size="large" />
                 </div>
-            ))}
+            ) : (
+                <div>
+                    <div className="flex justify-center mb-6">
+                        <Select
+                            value={selectedCategory}
+                            onChange={(value) => setSelectedCategory(value)}
+                            className="w-64"
+                            placeholder="Chọn loại sản phẩm"
+                        >
+                            {categories.map((category) => (
+                                <Option key={category} value={category}>
+                                    {category}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+
+                    {quotes
+                        .filter((quote) => quote.quoteCategory === selectedCategory)
+                        .map((quote) => (
+                            <div key={quote.quoteID} className="rounded-lg mb-4">
+                                <div className="h-64 flex justify-center items-center">
+                                    <img
+                                        alt={quote.quoteCategory}
+                                        src={quote.imageUrl}
+                                        className="object-contain w-full h-full"
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                </div>
+            )}
         </div>
     );
 }

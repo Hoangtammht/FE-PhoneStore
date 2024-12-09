@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Spin, Input, Select, Pagination, Modal, Button, Form, Upload, message, Table } from "antd";
 import ProductHandleApi from "apis/ProductHandleApi";
 import { v4 as uuidv4 } from 'uuid';
-import { FileAddFilled, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import AddPriceModal from './AddPriceModal';
 import AddSpecificationModal from "./AddSpecificationModal";
 
@@ -490,21 +490,27 @@ const ProductManagement = () => {
 
   return (
     <div className="p-5 bg-gray-100 dark:bg-gray-900 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">Quản lý sản phẩm</h1>
+      <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center sm:text-left">
+        Quản lý sản phẩm
+      </h1>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-wrap gap-4 mb-6 justify-center sm:justify-start">
         {[{ id: 1, name: "IPhone" }, { id: 2, name: "IPad" }, { id: 3, name: "MacBook" }, { id: 4, name: "Apple Watch" }, { id: 5, name: "Phụ kiện" }].map((category) => (
           <button
             key={category.id}
             onClick={() => setCategoryID(category.id)}
-            className={`px-4 py-2 rounded ${categoryID === category.id ? "bg-blue-500 text-white" : "bg-white text-gray-700 border border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-blue-500"} hover:bg-blue-500 hover:text-white active:bg-blue-600 transition-all`}
+            className={`px-4 py-2 rounded ${categoryID === category.id
+              ? "bg-blue-500 text-white"
+              : "bg-white text-gray-700 border border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-blue-500"
+              } hover:bg-blue-500 hover:text-white active:bg-blue-600 transition-all`}
           >
             {category.name}
           </button>
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 mb-6">
+
+      <div className="flex flex-wrap gap-4 mb-6 items-center justify-center sm:justify-between">
         <Search
           placeholder="Tìm kiếm sản phẩm..."
           enterButton
@@ -521,8 +527,11 @@ const ProductManagement = () => {
           <Option value="inStock">Còn hàng</Option>
           <Option value="outOfStock">Hết hàng</Option>
         </Select>
-        <Button type="primary" onClick={showModal}>Tạo sản phẩm</Button>
+        <Button type="primary" onClick={showModal} className="w-full sm:w-auto">
+          Tạo sản phẩm
+        </Button>
       </div>
+
 
       <div className="bg-white p-6 rounded shadow-md">
         {loading ? (
@@ -544,7 +553,6 @@ const ProductManagement = () => {
                   </p>
                   <Button
                     type="primary"
-                    icon={<FileAddFilled />}
                     className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md transition-all mt-2"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -553,11 +561,10 @@ const ProductManagement = () => {
                   >
                     Thêm nội dung
                   </Button>
-                  <div className="flex items-center justify-start gap-4 mt-4">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-4">
                     <Button
                       type="primary"
-                      icon={<FileAddFilled />}
-                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-all text-center"
+                      className="flex-1 basis-1/2 max-w-[45%] bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-all text-center"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleOpenModal(product.productID);
@@ -568,7 +575,7 @@ const ProductManagement = () => {
 
                     <Button
                       type="default"
-                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-black font-medium py-2 px-4 rounded-md transition-all text-center border border-gray-300"
+                      className="flex-1 basis-1/2 max-w-[45%] bg-gray-200 hover:bg-gray-300 text-black font-medium py-2 px-4 rounded-md transition-all text-center border border-gray-300"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleOpenPriceModal(product.productID);
@@ -577,10 +584,11 @@ const ProductManagement = () => {
                       Xem giá tiền
                     </Button>
                   </div>
-                  <div className="flex items-center justify-start gap-3 mt-4">
+
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-4">
                     <Button
                       type="primary"
-                      className="px-6 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-md transition-all"
+                      className="flex-1 basis-1/2 max-w-[45%] bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-all"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleOpenSpecModal(product.productID);
@@ -591,7 +599,7 @@ const ProductManagement = () => {
 
                     <Button
                       type="default"
-                      className="px-6 bg-gray-200 hover:bg-gray-300 text-black font-medium py-2 rounded-md transition-all border border-gray-300"
+                      className="flex-1 basis-1/2 max-w-[45%] bg-gray-200 hover:bg-gray-300 text-black font-medium py-2 px-4 rounded-md transition-all border border-gray-300"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleOpen(product.productID);
@@ -876,6 +884,9 @@ const ProductManagement = () => {
           columns={dataColumns}
           rowKey="variantID"
           pagination={false}
+          scroll={{
+            x: 800,
+          }}
         />
       </Modal>
 
