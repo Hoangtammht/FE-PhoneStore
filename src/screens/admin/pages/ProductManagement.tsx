@@ -6,7 +6,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import AddPriceModal from './AddPriceModal';
 import AddSpecificationModal from "./AddSpecificationModal";
 
-
+const { confirm } = Modal;
 const { Search } = Input;
 const { Option } = Select;
 
@@ -487,6 +487,55 @@ const ProductManagement = () => {
     });
   };
 
+  const handleChangeStatus = async (productID: string, currentStatus : number) => {
+    try {
+      const newStatus = currentStatus === 1 ? 2 : 1;
+      const response = await ProductHandleApi(
+        `/api/product/updateStatusOfProduct?productID=${productID}&status=${newStatus}`,
+        {},
+        "put"
+      );
+      if (response.status === 200) {
+        message.success("Trạng thái sản phẩm đã được cập nhật!");
+        fetchProducts(categoryID);
+      } else {
+        message.error("Không thể cập nhật trạng thái sản phẩm.");
+      }
+    } catch (error) {
+      message.error("Đã xảy ra lỗi khi cập nhật trạng thái sản phẩm.");
+    }
+  };
+
+  const handleDeleteProduct = (productID: string) => {
+    confirm({
+      title: "Bạn có chắc chắn muốn xóa sản phẩm này không?",
+      content: "Thao tác này không thể hoàn tác. Sản phẩm sẽ bị chuyển vào trạng thái đã xóa.",
+      okText: "Xác nhận",
+      okType: "danger",
+      cancelText: "Hủy",
+      onOk: async () => {
+        try {
+          const response = await ProductHandleApi(
+            `/api/product/updateStatusOfProduct?productID=${productID}&status=3`,
+            {},
+            "put"
+          );
+          if (response.status === 200) {
+            message.success("Sản phẩm đã được xóa thành công!");
+            fetchProducts(categoryID); // Hàm này bạn gọi để tải lại danh sách sản phẩm.
+          } else {
+            message.error("Không thể xóa sản phẩm.");
+          }
+        } catch (error) {
+          message.error("Đã xảy ra lỗi khi xóa sản phẩm.");
+        }
+      },
+      onCancel() {
+        message.info("Hủy thao tác xóa sản phẩm.");
+      },
+    });
+  };
+
 
   return (
     <div className="p-5 bg-gray-100 dark:bg-gray-900 min-h-screen">
@@ -508,7 +557,6 @@ const ProductManagement = () => {
           </button>
         ))}
       </div>
-
 
       <div className="flex flex-wrap gap-4 mb-6 items-center justify-center sm:justify-between">
         <Search
@@ -608,6 +656,31 @@ const ProductManagement = () => {
                       Xem thông số
                     </Button>
                   </div>
+
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-4">
+                    <Button
+                      type="primary"
+                      className="flex-1 basis-1/2 max-w-[45%] bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleChangeStatus(product.productID, product.status);
+                      }}
+                    >
+                      Chuyển trạng thái
+                    </Button>
+
+                    <Button
+                      type="default"
+                      className="flex-1 basis-1/2 max-w-[45%] bg-gray-200 hover:bg-gray-300 text-black font-medium py-2 px-4 rounded-md transition-all border border-gray-300"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteProduct(product.productID);
+                      }}
+                    >
+                      Xóa sản phẩm
+                    </Button>
+                  </div>
+
                 </div>
               ))}
             </div>
