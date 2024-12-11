@@ -98,7 +98,7 @@ function Header() {
     const groupedProducts = groupByModel(products);
 
     const handleLogoClick = () => {
-        navigate('/homepage');
+        navigate('/');
     };
 
     const handleProductClick = (categoryID: any) => {
