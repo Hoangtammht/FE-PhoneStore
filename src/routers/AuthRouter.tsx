@@ -13,7 +13,7 @@ const AuthRouter = () => {
     return (
       <ProductProvider>
       <Routes>
-        <Route path="/" element={<LayoutHome><HomeScreen /></LayoutHome>} />
+        <Route path="/homepage" element={<LayoutHome><HomeScreen /></LayoutHome>} />
         <Route path="/admin" element={<Login />} />
         <Route path="/product/:productId" element={<LayoutHome><ProductDetail /></LayoutHome>} />
         <Route path="/product/category/:categoryID" element={<LayoutHome><ProductByCategory /></LayoutHome>} />

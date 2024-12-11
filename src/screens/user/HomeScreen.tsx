@@ -7,7 +7,7 @@ function HomeScreen() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<ContentPage />} />
+        <Route path="/homepage" element={<ContentPage />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="/product/:category" element={<ProductByCategory />} />
       </Routes>
