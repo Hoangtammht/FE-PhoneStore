@@ -264,5 +264,6 @@ module.exports = {
       },
     },
   },
+  publicPath: '/static/',
   plugins: [],
 };
