@@ -1,7 +1,7 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-const baseURL = `http://camphone.zapto.org:8081`;
+const baseURL = `https://be-phonestore-89ru.onrender.com`;
 
 const AxiosClient = axios.create({
     baseURL,
