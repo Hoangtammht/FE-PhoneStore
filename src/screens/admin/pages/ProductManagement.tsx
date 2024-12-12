@@ -36,6 +36,7 @@ interface Specification {
 
 interface PriceVariant {
   variantID: string;
+  productColorID: string;
   colorName: string;
   storageCapacity: string;
   imagePath: string | null;
@@ -203,7 +204,7 @@ const ProductManagement = () => {
         <Button
           type="primary"
           danger
-          onClick={() => handleDeleteVariant(item.variantID)}
+          onClick={() => handleDeleteVariant(item.variantID, item.productColorID)}
         >
           Xóa
         </Button>
@@ -290,7 +291,6 @@ const ProductManagement = () => {
   };
 
   const handleCreateProduct = async (values: any) => {
-
     const newProduct = {
       productID: uuidv4(),
       categoryID: values.categoryID,
@@ -460,7 +460,7 @@ const ProductManagement = () => {
     message.error("Chỉnh sửa nội dung thất bại!");
   };
 
-  const handleDeleteVariant = async (variantID: string) => {
+  const handleDeleteVariant = async (variantID: string, productColorID: string) => {
     Modal.confirm({
       title: "Bạn có chắc chắn muốn xóa?",
       content: "Hành động này không thể hoàn tác.",
@@ -469,7 +469,7 @@ const ProductManagement = () => {
       onOk: async () => {
         try {
           const response = await ProductHandleApi(
-            `/api/product/deleteVariant?variantID=${variantID}`,
+            `/api/product/deleteVariant?variantID=${variantID}&productColorID=${productColorID}`,
             {},
             "delete"
           );
@@ -487,7 +487,7 @@ const ProductManagement = () => {
     });
   };
 
-  const handleChangeStatus = async (productID: string, currentStatus : number) => {
+  const handleChangeStatus = async (productID: string, currentStatus: number) => {
     try {
       const newStatus = currentStatus === 1 ? 2 : 1;
       const response = await ProductHandleApi(
@@ -522,7 +522,7 @@ const ProductManagement = () => {
           );
           if (response.status === 200) {
             message.success("Sản phẩm đã được xóa thành công!");
-            fetchProducts(categoryID); // Hàm này bạn gọi để tải lại danh sách sản phẩm.
+            fetchProducts(categoryID);
           } else {
             message.error("Không thể xóa sản phẩm.");
           }
@@ -735,7 +735,22 @@ const ProductManagement = () => {
         onCancel={handleCancel}
         footer={null}
       >
-        <Form form={form} initialValues={{ categoryID: 1 }} onFinish={handleCreateProduct}>
+        <Form
+          form={form}
+          initialValues={{ categoryID: 1 }}
+          onFinish={(values) => {
+            if (!imagePreview) {
+              form.setFields([
+                {
+                  name: "image",
+                  errors: ["Vui lòng chọn hình ảnh minh họa!"],
+                },
+              ]);
+              return;
+            }
+            handleCreateProduct({ ...values, image: imagePreview });
+          }}
+        >
           <Form.Item
             name="productName"
             label="Tên sản phẩm"
@@ -749,7 +764,10 @@ const ProductManagement = () => {
             label="Danh mục sản phẩm"
             rules={[{ required: true, message: "Chọn danh mục sản phẩm!" }]}
           >
-            <Select defaultValue={1} onChange={(value) => form.setFieldsValue({ categoryID: value })}>
+            <Select
+              defaultValue={1}
+              onChange={(value) => form.setFieldsValue({ categoryID: value })}
+            >
               <Option value={1}>Điện thoại</Option>
               <Option value={2}>iPad</Option>
               <Option value={3}>MacBook</Option>
@@ -784,20 +802,32 @@ const ProductManagement = () => {
 
           <Form.Item
             label="Hình ảnh"
-            rules={[{ required: true, message: "Chọn hình ảnh minh họa!" }]}>
+            name="image"
+            rules={[{ required: true, message: "Chọn hình ảnh minh họa!" }]}
+          >
             <Upload
               beforeUpload={handleUpload}
-              showUploadList={false}>
-
+              showUploadList={false}
+            >
               <Button icon={<UploadOutlined />}>Chọn và tải hình ảnh</Button>
             </Upload>
-            {imagePreview && <img src={imagePreview} alt="preview" style={{ width: '30%', marginTop: 10 }} />}
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="preview"
+                style={{ width: "30%", marginTop: 10 }}
+              />
+            )}
           </Form.Item>
+
           <Form.Item>
-            <Button type="primary" htmlType="submit">Tạo sản phẩm</Button>
+            <Button type="primary" htmlType="submit">
+              Tạo sản phẩm
+            </Button>
           </Form.Item>
         </Form>
       </Modal>
+
 
       <Modal
         title="Thêm nội dung sản phẩm"

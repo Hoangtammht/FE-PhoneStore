@@ -96,7 +96,6 @@ const ProductDetail = () => {
     const [selectedColorID, setSelectedColorID] = useState<string>('');
     const [colorOptions, setColorOptions] = useState<ColorOption[]>([]);
     const [storages, setStorages] = useState<StorageOption[]>([]);
-    // const [promotions, setPromotions] = useState<Promotion[]>([]);
     const [specifications, setSpecifications] = useState<Specification[]>([]);
     const [productVariant, setProductVariant] = useState<ProductVariant | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -238,7 +237,7 @@ const ProductDetail = () => {
         productName: product?.productName || "",
         variantID: productVariant?.variantID || "",
         image: product?.image || "",
-        price: productVariant?.price || 0,
+        price: productVariant ? productVariant.price : product?.price || 0,
     };
 
     const handleInstallClick = () => {

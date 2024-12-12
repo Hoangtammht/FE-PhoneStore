@@ -1,5 +1,8 @@
 import ProductHandleApi from 'apis/ProductHandleApi';
 import React, { useState, useEffect } from 'react';
+import { message, Modal } from 'antd';
+
+const { confirm } = Modal;
 
 interface Order {
   orderID: string;
@@ -18,7 +21,6 @@ interface Order {
   durationMonths: number;
   monthlyPayment: number;
 }
-
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -52,13 +54,46 @@ const OrderManagement = () => {
     setFilteredOrders(filtered);
   }, [orders, searchQuery, orderType]);
 
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
   const handleOrderTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setOrderType(e.target.value);
+  };
+
+  const handleUpdateStatus = async (orderID: string) => {
+    confirm({
+      title: 'Xác nhận cập nhật trạng thái',
+      content: 'Bạn có chắc chắn muốn cập nhật trạng thái đơn hàng này thành "Done"?',
+      okText: 'Xác nhận',
+      cancelText: 'Hủy',
+      onOk: async () => {
+        try {
+          const response = await ProductHandleApi(
+            `/api/product/updateStatusOfOrder?orderID=${orderID}&status=Done`,
+            {},
+            'put'
+          );
+  
+          if (response.status === 200) {
+            setOrders(prevOrders =>
+              prevOrders.map(order =>
+                order.orderID === orderID ? { ...order, status: 'Done' } : order
+              )
+            );
+            message.success('Trạng thái đã được cập nhật thành công!');
+          } else {
+            message.error('Không thể cập nhật trạng thái. Vui lòng thử lại!');
+          }
+        } catch (error) {
+          message.error('Đã xảy ra lỗi khi cập nhật trạng thái.');
+        }
+      },
+      onCancel() {
+        message.info('Hành động cập nhật đã bị hủy.');
+      },
+    });
   };
 
   return (
@@ -99,9 +134,9 @@ const OrderManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.map((order) => (
+            {filteredOrders.map(order => (
               <tr key={order.orderID}>
-                <td className="p-2 border">{order.fullName || "Chưa có thông tin"}</td>
+                <td className="p-2 border">{order.fullName || 'Chưa có thông tin'}</td>
                 <td className="p-2 border">{order.phone}</td>
                 <td className="p-2 border">{order.orderDate}</td>
                 <td className="p-2 border">{order.productName}</td>
@@ -109,23 +144,35 @@ const OrderManagement = () => {
                   {order.priceAtOrder.toLocaleString()} VND
                 </td>
                 <td className="p-2 border">
-                  {order.orderType === "installment" ? "Trả góp" : "Thường"}
+                  {order.orderType === 'installment' ? 'Trả góp' : 'Thường'}
                 </td>
-                <td className="p-2 border">{order.content || "-"}</td>
+                <td className="p-2 border">{order.content || '-'}</td>
                 <td className="p-2 border">
-                  {order.orderType === "installment" ? order.durationMonths : "-"}
+                  {order.orderType === 'installment' ? order.durationMonths : '-'}
                 </td>
                 <td className="p-2 border">
-                  {order.orderType === "installment" ? order.monthlyPayment.toLocaleString() : "-"}
+                  {order.orderType === 'installment' ? order.monthlyPayment.toLocaleString() : '-'}
                 </td>
-                <td className="p-2 border">{order.status || "Chưa xử lý"}</td>
+                <td className="p-2 border">
+                  {order.status === 'Processing' ? (
+                    <button
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                      onClick={() => handleUpdateStatus(order.orderID)}
+                    >
+                      Chưa liên hệ
+                    </button>
+                  ) : order.status === 'Done' ? (
+                    'Đã liên hệ'
+                  ) : (
+                    order.status || 'Chưa xử lý'
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
     </div>
-
   );
 };
 

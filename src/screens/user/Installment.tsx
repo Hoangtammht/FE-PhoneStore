@@ -155,7 +155,7 @@ function Installment() {
           {installmentPlans.map((plan) => (
             <div
               key={plan.durationMonths}
-              className={`flex flex-col items-center p-2 border rounded-lg w-[30%] sm:w-auto ${selectedPlan?.durationMonths === plan.durationMonths ? "bg-red-100 text-red-600" : "bg-gray-100"
+              className={`flex flex-col items-center p-2 border cursor-pointer rounded-lg w-[30%] sm:w-auto ${selectedPlan?.durationMonths === plan.durationMonths ? "bg-red-100 text-red-600" : "bg-gray-100"
                 }`}
               onClick={() => setSelectedPlan(plan)}
             >

@@ -103,9 +103,9 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
     };
 
     const handleFormSubmit = async () => {
-        setIsLoading(true); 
+        setIsLoading(true);
         const customerID = generateUniqueID()
-        const orderID = generateUniqueID(); 
+        const orderID = generateUniqueID();
         const orderDetailID = generateUniqueID();
 
         const orderData = {
@@ -116,7 +116,7 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
             productID: product?.productID || 0,
             totalAmount: price,
             customerID: customerID,
-            orderID: orderID, 
+            orderID: orderID,
             orderDetailID: orderDetailID,
             content: formData.message,
             orderType: 'normal'
@@ -142,12 +142,14 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
             }
         } catch (error) {
             console.error('Error creating order:', error);
-        }finally {
+        } finally {
             setIsLoading(false);
         }
     };
+    const isFormValid = formData.name.trim() !== '' && formData.phone.trim() !== '' && formData.phone.length === 10;
 
     return (
+
         <Modal
             title={`Đặt hàng - ${product?.productName}`}
             visible={isVisible}
@@ -168,7 +170,7 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
                     onClick={handleFormSubmit}
                     style={{ width: "45%" }}
                     size="large"
-                    disabled={isLoading}
+                    disabled={!isFormValid || isLoading}
                 >
                     {isLoading ? <Spin indicator={loadingIcon} /> : "Đặt hàng"}
                 </Button>,
@@ -199,11 +201,10 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
                                         setSelectedStorage(storage.storageCapacity);
                                         setSelectedStorageID(storage.productStorageID);
                                     }}
-                                    className={`w-full flex justify-between ${
-                                        selectedStorage === storage.storageCapacity
+                                    className={`w-full flex justify-between ${selectedStorage === storage.storageCapacity
                                             ? "bg-orange-500 text-white hover:bg-orange-600"
                                             : "hover:bg-orange-100"
-                                    }`}
+                                        }`}
                                 >
                                     {storage.storageCapacity}
                                 </Button>
@@ -220,11 +221,10 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
                                         setSelectedColor(color.colorName);
                                         setSelectedColorID(color.productColorID);
                                     }}
-                                    className={`w-full flex justify-between ${
-                                        selectedColor === color.colorName
+                                    className={`w-full flex justify-between ${selectedColor === color.colorName
                                             ? "bg-orange-500 text-white hover:bg-orange-600"
                                             : "hover:bg-orange-100"
-                                    }`}
+                                        }`}
                                 >
                                     <span>{color.colorName}</span>
                                 </Button>
@@ -236,7 +236,12 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
                         </div>
 
                         <Form layout="vertical">
-                            <Form.Item label="Họ và tên" required>
+                            <Form.Item
+                                label="Họ và tên"
+                                required
+                                validateStatus={formData.name.trim() === "" ? "error" : ""}
+                                help={formData.name.trim() === "" ? "Họ và tên không được để trống" : ""}
+                            >
                                 <Input
                                     value={formData.name}
                                     onChange={(e) => handleFormChange("name", e.target.value)}
@@ -245,7 +250,22 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
                                 />
                             </Form.Item>
 
-                            <Form.Item label="Số điện thoại" required>
+                            <Form.Item
+                                label="Số điện thoại"
+                                required
+                                validateStatus={
+                                    formData.phone.trim() === "" || formData.phone.length !== 10
+                                        ? "error"
+                                        : ""
+                                }
+                                help={
+                                    formData.phone.trim() === ""
+                                        ? "Số điện thoại không được để trống"
+                                        : formData.phone.length !== 10
+                                            ? "Số điện thoại phải có 10 chữ số"
+                                            : ""
+                                }
+                            >
                                 <Input
                                     value={formData.phone}
                                     onChange={(e) => {
@@ -274,6 +294,7 @@ const OrderNowModal: React.FC<OrderNowModalProps> = ({
                 )}
             </div>
         </Modal>
+
     );
 };
 
