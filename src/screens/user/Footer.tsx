@@ -153,11 +153,16 @@ function FooterPage() {
                   <Text className="text-gray-300">
                     Phản hồi chất lượng dịch vụ:
                     <a
-                      href="zalo://chat?phone=0962533939"
+                      href="#"
                       onClick={(e) => {
-                        setTimeout(() => {
-                          window.open("https://zalo.me/0962533939", "_blank");
-                        }, 1000);
+                        e.preventDefault();
+                        if (navigator.userAgent.includes("Zalo")) {
+                          window.location.href = "zalo://chat?phone=0962533939";
+                        } else {
+                          setTimeout(() => {
+                            window.open("https://zalo.me/0962533939", "_blank");
+                          }, 1000);
+                        }
                       }}
                       className="text-blue-400 hover:underline ml-2"
                     >

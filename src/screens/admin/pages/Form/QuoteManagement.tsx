@@ -111,6 +111,7 @@ function QuoteManagement() {
           <Option value="all">Tất cả loại</Option>
           <Option value="Iphone">Iphone</Option>
           <Option value="Samsung">Samsung</Option>
+          <Option value="Oppo">Oppo</Option>
           <Option value="Vivo">Vivo</Option>
         </Select>
         <Button type="primary" onClick={() => setIsModalVisible(true)}>
