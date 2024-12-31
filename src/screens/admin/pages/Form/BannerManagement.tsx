@@ -73,7 +73,7 @@ const BannerManagement = () => {
 
     const newBanner = {
       description: values.description,
-      imageUrl: imagePreview,
+      imageURL: imagePreview,
     };
 
     try {
